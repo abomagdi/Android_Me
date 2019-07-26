@@ -16,10 +16,12 @@
 
 package com.example.android.android_me.ui;
 
+import android.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import com.example.android.android_me.R;
+import com.example.android.android_me.data.AndroidImageAssets;
 
 // This activity will display a custom Android image composed of three body parts: head, body, and legs
 public class AndroidMeActivity extends AppCompatActivity {
@@ -40,5 +42,36 @@ public class AndroidMeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_android_me);
 
         // TODO (5) Create a new BodyPartFragment instance and display it using the FragmentManager
+
+        if(savedInstanceState == null) {
+
+            BodyPartFragment headFragment = new BodyPartFragment();
+            BodyPartFragment bodyFragment = new BodyPartFragment();
+            BodyPartFragment legsFragment = new BodyPartFragment();
+
+            // Get the correct index to access in the array of head images from the intent
+            // Set the default value to 0
+            int headIndex = getIntent().getIntExtra("headIndex", 0);
+            headFragment.setmListIndex(headIndex);
+
+            int bodyIndex = getIntent().getIntExtra("bodyIndex", 0);
+            bodyFragment.setmListIndex(bodyIndex);
+
+            int legIndex = getIntent().getIntExtra("legIndex", 0);
+            legsFragment.setmListIndex(legIndex);
+
+            headFragment.setmImageIds(AndroidImageAssets.getHeads());
+            bodyFragment.setmImageIds(AndroidImageAssets.getBodies());
+            legsFragment.setmImageIds(AndroidImageAssets.getLegs());
+
+
+            android.support.v4.app.FragmentManager fragmentManager = getSupportFragmentManager();
+
+            fragmentManager.beginTransaction().add(R.id.head_container, headFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.body_container, bodyFragment).commit();
+            fragmentManager.beginTransaction().add(R.id.legs_container, legsFragment).commit();
+        }
+
+
     }
 }
